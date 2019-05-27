@@ -7,37 +7,98 @@ import java.util.Set;
 public class HashMap {
     private ArrayList<noHash> lista;
     private int TAM = 5;
-    
+    private int qtdElement = 0;
     
     void create(){
-        if (lista == null){
-           lista = new ArrayList<>();
-           for(int i = 0; i < TAM; i++){
-               lista.add(null);
-            }        
+        try {
+           if (lista == null){
+                lista = new ArrayList<>();
+                for(int i = 0; i < TAM; i++){
+                    lista.add(null);
+                }        
+           }
+        } catch (Exception e) {
+            System.out.println("Erro!");         
         }
     }
+        
     void inserir(int chave, int valor){
+         try {
             noHash aux;
             int key = hash(chave);
             if(lista.get(key) != null){
                 aux = lista.get(key);
-                do{
-                    if(aux == null){
-                        aux = new noHash(chave, valor);
+                while(aux != null){
+                    if(aux.getProx() == null){
+                        aux.setProx(new noHash(chave, valor));
+                        qtdElement++;
                         return;
                     }
                     aux = aux.getProx();
-                }while(aux != null);
+                }
             } else{
                   aux = new noHash(chave, valor);
                   lista.set(key,aux);
-            }
-            
-        }        
-    int hash(int chave){
-            return (chave % TAM) + 1;         
-         }
+                  qtdElement++;
+            }     
+        } catch (Exception e) {
+            System.out.println("Erro!");         
+        }          
+    } 
+    
+    void getVal(int chave, int val){       
+        try {
+            int hash = hash(chave);
+            noHash aux;
+            aux = lista.get(hash);
+            if(aux.getValor() == val){
+                System.out.println("Valor inserido!");
+            }else{
+                while(aux != null){
+                    if(aux.getValor() == val){
+                        System.out.println("Valor inserido!");
+                        return;
+                    }
+                    aux = aux.getProx();
+                }
+               System.out.println("Elemento não encontrado!"); 
+            }     
+        } catch (Exception e) {
+            System.out.println("Erro!");
+        }
+        
+       
+    }
+    
+    private int hash(int chave){
+            return chave % TAM;         
+    }
+
+    public ArrayList<noHash> getLista() {
+        return lista;
+    }
+
+    public void setLista(ArrayList<noHash> lista) {
+        this.lista = lista;
+    }
+
+    public int getTAM() {
+        return TAM;
+    }
+
+    public void setTAM(int TAM) {
+        this.TAM = TAM;
+    }
+
+    public int getQtdElement() {
+        return qtdElement;
+    }
+
+    public void setQtdElement(int qtdElement) {
+        this.qtdElement = qtdElement;
+    }
+    
+    
     
     
     }
