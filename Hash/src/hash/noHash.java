@@ -10,8 +10,7 @@ public class noHash {
         this.valor = valor;
         this.prox = null;
     }
-
-    
+       
     public noHash getProx() {
         return prox;
     }

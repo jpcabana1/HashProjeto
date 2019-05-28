@@ -1,8 +1,7 @@
 package hash;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+
 
 public class HashMap {
     private ArrayList<noHash> lista;
@@ -26,7 +25,8 @@ public class HashMap {
     void destroy(){
         try {
             lista.clear();
-            TAM = 0;
+            lista=null;
+            TAM = 5;
             qtdElement = 0;
             qtdColisao = 0;
         } catch (Exception e) {
@@ -35,8 +35,8 @@ public class HashMap {
         
     }
     void inserir(int chave, int valor){
-         try {
-            noHash aux, novo;
+        noHash aux, auxAnterior, novo; 
+        try {           
             int key = hash(chave);
             if(lista.get(key) != null){
                 aux = lista.get(key);
@@ -46,64 +46,55 @@ public class HashMap {
                 else if(valor > aux.getValor()){
                       novo =  new noHash(chave, valor);
                       novo.setProx(aux);
-                      lista.set(key, novo);
-                      return;
+                      lista.set(key, novo);              
                 }
-                else{                  
-                    while(aux.getProx() != null){             
-                            if (valor > aux.getValor()){
-                                novo =  new noHash(chave, valor);
-                                novo.setProx(aux);
-                                aux.equals(novo);
-                                return;
-                            }                         
+                else{
+                    qtdColisao++;
+                    auxAnterior = aux;
+                    aux = aux.getProx();
+                    while(aux != null){
+                        if(valor == aux.getValor()){
+                            return;
+                         }
+                        else if(valor > aux.getValor()){
+                            novo =  new noHash(chave, valor);
+                            novo.setProx(aux);
+                            auxAnterior.setProx(novo);
+                            return;
+                        }
+                        qtdColisao ++;
+                        auxAnterior = aux;    
                         aux = aux.getProx();
-                    }
-                    if(valor > aux.getValor()){
-                        novo =  new noHash(chave, valor);
-                        novo.setProx(aux);
-                        aux.equals(novo);
-                        return;
-                    }else{
-                        aux.setProx(new noHash(chave, valor));                           
-                        return;
-                    }
+                    }                    
+                    novo =  new noHash(chave, valor);
+                    novo.setProx(aux);
+                    auxAnterior.setProx(novo);                                         
                 }                       
             }else{
                   aux = new noHash(chave, valor);
                   lista.set(key,aux);                 
-            }  
-             
-            
+            }         
         } catch (Exception e) {
             System.out.println("Erro!");         
         }          
     } 
     
-    /*void ordena(int chave){
-        noHash aux, aux2, temp;
-        int key;
-        try {
-              key = hash(chave);             
-              
-                 aux = lista.get(key);
-                 while()
-                 aux2 = aux.getProx();
-                  while(aux2 != null){
-                      if(aux.getValor() > aux2.getValor()){
-                          temp = aux;
-                          aux = aux2;
-                          aux2 = temp;
-                      }
-                      aux = aux2;
-                      aux2 = aux2.getProx();
-                  }
-              
-        } catch (Exception e) {
-            System.out.println("Erro!");     
+    
+    void bubbleSort(int vet[]){
+        int aux = 0;
+        for(int i = 0; i<100; i++){
+        for(int j = 0; j<99; j++){
+            if(vet[j] > vet[j + 1]){
+                aux = vet[j];
+                vet[j] = vet[j+1];
+                vet[j+1] = aux;
+            }
         }
     }
-    */
+    }
+            
+    
+    
     void exibeFileira(int chave){
         noHash aux;
         int key;
@@ -114,6 +105,7 @@ public class HashMap {
                  System.out.print(aux.getValor()+",");             
                  aux = aux.getProx();
              }
+             System.out.println("");             
         } catch (Exception e) {
             System.out.println("Erro!");         
         }
@@ -169,6 +161,14 @@ public class HashMap {
 
     public void setQtdElement(int qtdElement) {
         this.qtdElement = qtdElement;
+    }
+
+    public int getQtdColisao() {
+        return qtdColisao;
+    }
+
+    public void setQtdColisao(int qtdColisao) {
+        this.qtdColisao = qtdColisao;
     }
     
     
