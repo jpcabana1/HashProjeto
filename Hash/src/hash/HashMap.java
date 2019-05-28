@@ -8,6 +8,7 @@ public class HashMap {
     private ArrayList<noHash> lista;
     private int TAM = 5;
     private int qtdElement = 0;
+    private int qtdColisao = 0;
     
     void create(){
         try {
@@ -21,30 +22,102 @@ public class HashMap {
             System.out.println("Erro!");         
         }
     }
+     
+    void destroy(){
+        try {
+            lista.clear();
+            TAM = 0;
+            qtdElement = 0;
+            qtdColisao = 0;
+        } catch (Exception e) {
+            System.out.println("Erro ao destruir Tabela hash!");   
+        }
         
+    }
     void inserir(int chave, int valor){
          try {
-            noHash aux;
+            noHash aux, novo;
             int key = hash(chave);
             if(lista.get(key) != null){
                 aux = lista.get(key);
-                while(aux != null){
-                    if(aux.getProx() == null){
-                        aux.setProx(new noHash(chave, valor));
-                        qtdElement++;
+                if(valor == aux.getValor()){
+                    return;
+                }
+                else if(valor > aux.getValor()){
+                      novo =  new noHash(chave, valor);
+                      novo.setProx(aux);
+                      lista.set(key, novo);
+                      return;
+                }
+                else{                  
+                    while(aux.getProx() != null){             
+                            if (valor > aux.getValor()){
+                                novo =  new noHash(chave, valor);
+                                novo.setProx(aux);
+                                aux.equals(novo);
+                                return;
+                            }                         
+                        aux = aux.getProx();
+                    }
+                    if(valor > aux.getValor()){
+                        novo =  new noHash(chave, valor);
+                        novo.setProx(aux);
+                        aux.equals(novo);
+                        return;
+                    }else{
+                        aux.setProx(new noHash(chave, valor));                           
                         return;
                     }
-                    aux = aux.getProx();
-                }
-            } else{
+                }                       
+            }else{
                   aux = new noHash(chave, valor);
-                  lista.set(key,aux);
-                  qtdElement++;
-            }     
+                  lista.set(key,aux);                 
+            }  
+             
+            
         } catch (Exception e) {
             System.out.println("Erro!");         
         }          
     } 
+    
+    /*void ordena(int chave){
+        noHash aux, aux2, temp;
+        int key;
+        try {
+              key = hash(chave);             
+              
+                 aux = lista.get(key);
+                 while()
+                 aux2 = aux.getProx();
+                  while(aux2 != null){
+                      if(aux.getValor() > aux2.getValor()){
+                          temp = aux;
+                          aux = aux2;
+                          aux2 = temp;
+                      }
+                      aux = aux2;
+                      aux2 = aux2.getProx();
+                  }
+              
+        } catch (Exception e) {
+            System.out.println("Erro!");     
+        }
+    }
+    */
+    void exibeFileira(int chave){
+        noHash aux;
+        int key;
+        try {
+             key = hash(chave);
+             aux = lista.get(key); 
+             while(aux != null){
+                 System.out.print(aux.getValor()+",");             
+                 aux = aux.getProx();
+             }
+        } catch (Exception e) {
+            System.out.println("Erro!");         
+        }
+    }
     
     void getVal(int chave, int val){       
         try {
